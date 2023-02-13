@@ -4,7 +4,7 @@
   overflow-x: hidden;
   background: -webkit-gradient(linear, left top, right top, color-stop(50%, #dfdddd6b), color-stop(50%, #4dd6b6));
   background: linear-gradient(to right, #dfdddd 50%, #4dd6b6 50%);
-  background-image: url('./grass.jpg');
+  background-image: url('./purple.jpg');
   background-repeat: no-repeat;
   background-size: cover;
 }

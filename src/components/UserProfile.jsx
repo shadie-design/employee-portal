@@ -10,6 +10,19 @@ import { FiLogOut } from 'react-icons/fi';
 const UserProfile = () => {
   const { currentColor,setIsClicked } = useStateContext();
   let history = useNavigate();
+  const userName = localStorage.getItem('Username');
+  const userEmail = localStorage.getItem('Email');
+  const phoneNumber = localStorage.getItem('Phone');
+
+  const logout = async () => {
+    await history("/");
+    localStorage.removeItem("Username");
+    localStorage.removeItem("Email");
+    localStorage.removeItem("Phone");
+    localStorage.removeItem("Token");
+    localStorage.removeItem("TenantId");
+    localStorage.removeItem("isLoggedIn");
+  }
 
   return (
     <div className="nav-item absolute right-1 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
@@ -30,9 +43,9 @@ const UserProfile = () => {
           alt="user-profile"
         />
         <div>
-          <p className="font-semibold text-xl dark:text-gray-200"> Michael Roberts </p>
-          <p className="text-gray-500 text-sm dark:text-gray-400">  Administrator   </p>
-          <p className="text-gray-500 text-sm font-semibold dark:text-gray-400"> plezo@.com </p>
+          <p className="font-semibold text-xl dark:text-gray-200"> {userName} </p>
+          <p className="text-gray-500 text-sm dark:text-gray-400">  {phoneNumber}   </p>
+          <p className="text-gray-500 text-sm font-semibold dark:text-gray-400"> {userEmail} </p>
         </div>
       </div>
       <div>
@@ -56,7 +69,7 @@ const UserProfile = () => {
       <div className="mt-5">
         <button
           type="button"
-          onClick={() => { history("/"),setIsClicked(true) }}
+          onClick={() => { logout(),setIsClicked(true) }}
           style={{ backgroundColor: currentColor, color: "white", borderRadius: "10px" }}
           className={`  p-3 w-full hover:drop-shadow-xl hover:bg-none`}
         >Logout

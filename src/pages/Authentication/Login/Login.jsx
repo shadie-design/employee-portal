@@ -6,6 +6,7 @@ import { useNavigate  } from "react-router-dom";
 import { useStateContext } from '../../../contexts/ContextProvider';
 import {CircularProgress,} from '@material-ui/core';
 import { useToasts } from "react-toast-notifications";
+import Api from "../../../contexts/Api"
 const Login = () => {
     const { setLoginStatus, isLoggedIn } = useStateContext();
     const initialValue = useRef(true);
@@ -19,24 +20,48 @@ const Login = () => {
     const { addToast } = useToasts();
 
     const handlesubmit = (event) => {
-        event.preventDefault();
-        setIsisLoginInProgress(true);
-        if (emailval === "admin@gmail.com" && passval === "admin*1234") {
-            setLoginStatus(true);
-            setIsLoginSuccesful(true);       
-            setTimeout(() => {
-                setIsisLoginInProgress(false);
-                addToast("Logged in successfully", { appearance: 'success' }); 
-                history("/home");
-             }, 1000);
-            
-        }else{
-            setLoginStatus(true);
-            setIsLoginSuccesful(false);
-            setTimeout(() => {
-                setIsisLoginInProgress(false);
-             }, 1000);
-        }
+        event.preventDefault();        
+        setIsisLoginInProgress(true); 
+       // fetch method
+       const LoginUrl = Api.AppBaseUrl + 'Login';
+       const username = emailval;
+       const password = passval;
+       const sourceSystem = "employee portal";
+       const user = { username, password,sourceSystem };
+
+       fetch(LoginUrl, {
+        method: 'POST',
+        headers: { 
+            'Accept' : 'application/json',
+            'Content-Type': 'application/json'
+           },
+        body: JSON.stringify(user)
+      })
+    .then(res => res.json())
+    .then((data) => {
+    console.log(data);
+     if (data.success === true) {
+        setLoginStatus(true);
+        setIsLoginSuccesful(true);       
+            localStorage.setItem('Username', data.data.userName);
+            localStorage.setItem('Email', data.data.email);
+            localStorage.setItem('Phone', data.data.phoneNumber);
+            localStorage.setItem('TenantId', data.data.tenantId);
+            localStorage.setItem('Token', data.data.token);
+            setIsisLoginInProgress(false);
+            addToast("Logged in successfully", { appearance: 'success' }); 
+            history("/home");
+        
+    }else{
+        setLoginStatus(true);
+        setIsLoginSuccesful(false);
+        addToast("Login failed", { appearance: 'error' }); 
+        setIsisLoginInProgress(false);
+    }
+
+    });
+
+       
         
 
     }
@@ -53,10 +78,10 @@ const Login = () => {
                         </div>
                         <div className='listInfo'>
                             <ol className="list listItems listText">
-                                <li class="list-item one"><span>Preloaded data or upload your own</span></li>
-                                <li class="list-item two"><span>Preconfigured processes, reports, and dashboards</span></li>
-                                <li class="list-item three"><span>Guided experiences for sales reps and administrators</span></li>
-                                <li class="list-item four"><span>Online training and live onboarding webinars</span></li>
+                                <li className="list-item one"><span>Preloaded data or upload your own</span></li>
+                                <li className="list-item two"><span>Preconfigured processes, reports, and dashboards</span></li>
+                                <li className="list-item three"><span>Guided experiences for sales reps and administrators</span></li>
+                                <li className="list-item four"><span>Online training and live onboarding webinars</span></li>
                             </ol>
                         </div>
                         <div className="footerText">
@@ -70,8 +95,8 @@ const Login = () => {
                     </div>
 
                     <form className='formStyle' onSubmit={handlesubmit}>
-                        <label htmlFor="emil1">Email</label>
-                        <input placeholder="Enter your email..." type="email" value={emailval}
+                        <label htmlFor="emil1">Username</label>
+                        <input placeholder="Enter your username..." type="text" value={emailval}
                             onChange={(e) => { setemailval(e.target.value) }} id="emil1" />
                         <label htmlFor="pwd1">Password</label>
                         <input  placeholder="Enter password" type="password" autoComplete="false"
