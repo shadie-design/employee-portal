@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './Login.css';
 import { Link } from 'react-router-dom';
 import plezoLogo from './plezoLogo.png';
+import companyLogo from './companyLogo.jpg';
 import { useNavigate  } from "react-router-dom";
 import { useStateContext } from '../../../contexts/ContextProvider';
 import {CircularProgress,} from '@material-ui/core';
@@ -90,6 +91,7 @@ const Login = () => {
                     </div>
                 </div>
                 <div className="left-side">
+                <img src={companyLogo} className="companyLogo" id='img' alt="" />
                     <div className="img-class">
                         <h1 className='textWhite'><u>Login</u></h1>
                     </div>

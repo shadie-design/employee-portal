@@ -113,7 +113,7 @@
 
 .main-login .login-contain .left-side #sub_butt {
   width: 80%;
-  background: #00639E;
+  background: #00639F;
   color: white;
   border: none;
   cursor: pointer;
@@ -186,11 +186,12 @@
 }
 
 .textInfoHeader{
-  color: #00639E;
+  color: #330572;
   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   text-align:left;
   font-size:xx-large ;
   margin-left: 80px;
+  font-weight: bold;
   margin-right: 50px;
   margin-top: 30px;
 }
@@ -261,7 +262,7 @@ ol li:before {
   text-align: center;
   border-radius: 2em;
   font-weight: 700;
-  background: linear-gradient(45deg, #10260a, #2cd70e);
+  background: linear-gradient(45deg, #32057261, #330572);
 }
 
 
@@ -270,6 +271,14 @@ ol li:before {
   width: 205px;
   margin-top: 50px;
   margin-left: 33%;
+}
+
+.companyLogo{
+  height: 100px;
+  width: 165px;
+  margin-top: -80px;
+  margin-left: 35%;
+  margin-bottom: 30px;
 }
 
 .main-login .login-contain .right-side .welcomeImg #wel-img-id {
