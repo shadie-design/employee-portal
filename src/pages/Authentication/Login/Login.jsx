@@ -49,15 +49,20 @@ const Login = () => {
             localStorage.setItem('Phone', data.data.phoneNumber);
             localStorage.setItem('TenantId', data.data.tenantId);
             localStorage.setItem('Token', data.data.token);
-            setIsisLoginInProgress(false);
-            addToast("Logged in successfully", { appearance: 'success' }); 
+            setTimeout(() => {
+                setIsisLoginInProgress(false);
+            addToast(data.message, { appearance: 'success' }); 
             history("/home");
+              }, 1000)
+           
         
     }else{
+        setTimeout(() => {
         setLoginStatus(true);
         setIsLoginSuccesful(false);
-        addToast("Login failed", { appearance: 'error' }); 
+        addToast(data.message, { appearance: 'error' }); 
         setIsisLoginInProgress(false);
+    }, 1000)
     }
 
     });
@@ -106,7 +111,7 @@ const Login = () => {
                             id="pwd1" />
                             {isLoginInProgress === true ? <button id="sub_butt"><CircularProgress
                                                 size={16}
-                                                color="white"
+                                                color="secondary"
                                                 className="buttonProgress"
                                             /></button>  : <button type="submit" id="sub_butt">Login</button>}
                         
