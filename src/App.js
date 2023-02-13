@@ -6,7 +6,7 @@ import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { Navbar, Footer, Sidebar, ThemeSettings } from './components';
 import { Ecommerce, Orders, Calendar, MyProfile, Stacked, Pyramid, Leaves, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor, Home, Settings, Notifications } from './pages';
 import './App.css';
-
+import { ToastProvider } from "react-toast-notifications";
 import { useStateContext } from './contexts/ContextProvider';
 import Login from './pages/Authentication/Login/Login';
 
@@ -23,6 +23,7 @@ const App = () => {
   }, []);
 
   return (
+    <ToastProvider autoDismiss={true}>
       <BrowserRouter>
               <Routes>
                 {/* dashboard  */}
@@ -40,6 +41,7 @@ const App = () => {
 
               </Routes>
       </BrowserRouter>
+      </ToastProvider>
   );
 };
 

@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import plezoLogo from './plezoLogo.png';
 import { useNavigate  } from "react-router-dom";
 import { useStateContext } from '../../../contexts/ContextProvider';
-import {CircularProgress,} from '@material-ui/core'
+import {CircularProgress,} from '@material-ui/core';
+import { useToasts } from "react-toast-notifications";
 const Login = () => {
     const { setLoginStatus, isLoggedIn } = useStateContext();
     const initialValue = useRef(true);
@@ -15,6 +16,7 @@ const Login = () => {
 
     const [isLoginSuccesful, setIsLoginSuccesful] = useState(false);
     const [isLoginInProgress, setIsisLoginInProgress] = useState(false);
+    const { addToast } = useToasts();
 
     const handlesubmit = (event) => {
         event.preventDefault();
@@ -24,6 +26,7 @@ const Login = () => {
             setIsLoginSuccesful(true);       
             setTimeout(() => {
                 setIsisLoginInProgress(false);
+                addToast("Logged in successfully", { appearance: 'success' }); 
                 history("/home");
              }, 1000);
             
