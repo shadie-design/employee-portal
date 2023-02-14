@@ -105,7 +105,7 @@
   text-align: left;
   width: 78%;
   margin: auto;
-  font-size: small;
+  font-size: medium;
   color: rgb(255, 255, 255);
   margin-bottom: 0.5rem;
 }
@@ -165,6 +165,64 @@
   font-size: xx-large;
   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+
+.textFieldWhite{
+  color: white;
+}
+.formFieldRow{
+ flex-direction: row;
+ width: 100%;
+}
+ .passEyeButton{
+  position: relative;
+  right: 10;
+  top: 0;
+  width:10%;
+ }
+
+.forgotPasswordLink{
+  margin-bottom: 20px;
+}
+
+.createAccount{
+  text-align: center;
+  margin-top: 20px;
+}
+
+.createAccountText{
+  color: white;
+}
+.createAccountLink{
+  color: #B0D2F3;
+}
+
+.createAccountLink {
+  text-decoration: none;
+  color: #B0D2F3;
+  text-align: center;
+  font-weight: bold;
+  margin-left: 10px;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.createAccountLink:hover {
+  -webkit-transform: translateY(-5px);
+          transform: translateY(-5px);
+  color: gray;
+}
+.buttonLink {
+  text-decoration: none;
+  color: #B0D2F3;
+  text-align: center;
+  font-weight: bold;
+  margin-left: 10px;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.buttonLink:hover {
+  color: gray;
+}
+
 
 .formStyle{
   justify-content: center;

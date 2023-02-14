@@ -8,14 +8,13 @@ import { useStateContext } from '../../../contexts/ContextProvider';
 import {CircularProgress,} from '@material-ui/core';
 import { useToasts } from "react-toast-notifications";
 import Api from "../../../contexts/Api"
-const Login = () => {
+const CreateAccount = () => {
     const { setLoginStatus, isLoggedIn } = useStateContext();
     const initialValue = useRef(true);
     let history = useNavigate ();
 
     const [emailval, setemailval] = useState("");
     const [passval, setpassval] = useState("");
-
     const [isLoginSuccesful, setIsLoginSuccesful] = useState(false);
     const [isLoginInProgress, setIsisLoginInProgress] = useState(false);
     const { addToast } = useToasts();
@@ -24,19 +23,13 @@ const Login = () => {
         event.preventDefault();        
         setIsisLoginInProgress(true); 
        // fetch method
-       const LoginUrl = Api.AppBaseUrl + 'Login';
-       const username = emailval;
-       const password = passval;
-       const sourceSystem = "employee portal";
-       const user = { username, password,sourceSystem };
-
-       fetch(LoginUrl, {
-        method: 'POST',
+       const LoginUrl = Api.AppBaseUrl + 'EmployeePortal/Employee/GetByEmail/' + emailval;
+     fetch(LoginUrl, {
+        method: 'GET',
         headers: { 
             'Accept' : 'application/json',
             'Content-Type': 'application/json'
            },
-        body: JSON.stringify(user)
       })
     .then(res => res.json())
     .then((data) => {
@@ -47,31 +40,61 @@ const Login = () => {
             localStorage.setItem('Username', data.data.userName);
             localStorage.setItem('Email', data.data.email);
             localStorage.setItem('Phone', data.data.phoneNumber);
-            localStorage.setItem('TenantId', data.data.tenantId);
-            localStorage.setItem('Id', data.data.id);
-            localStorage.setItem('Token', data.data.token);
-            setTimeout(() => {
-                setIsisLoginInProgress(false);
-            addToast(data.message, { appearance: 'success' }); 
-            history("/home");
-              }, 1000)
+            localStorage.setItem('TenantId', "");
+            localStorage.setItem('Token', "");
+          RegisterUser(data.data.userName,data.data.email,data.data.phoneNumber);
+
            
         
     }else{
-        setTimeout(() => {
         setLoginStatus(true);
         setIsLoginSuccesful(false);
-        addToast(data.message, { appearance: 'error' }); 
+        addToast(data.errorMessage, { appearance: 'error' }); 
         setIsisLoginInProgress(false);
-    }, 1000)
     }
 
     });
-
-       
-        
-
     }
+
+  //autoregister user if allowed to access portal
+  const RegisterUser = (UserName,Email,Phone) => {
+    setIsisLoginInProgress(true);
+    // fetch method
+    const RegisterUrl = Api.AppBaseUrl + 'Register';
+    const userToRegister = { UserName, Email, Phone };
+    fetch(RegisterUrl, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userToRegister)
+    })
+        .then(res => res.json())
+        .then((data) => {
+            console.log(data);
+            if (data.success === true) {
+                setLoginStatus(true);
+                setIsLoginSuccesful(true);
+                setTimeout(() => {
+                    setIsisLoginInProgress(false);
+                    addToast(data.message, { appearance: 'success' });
+                    history("/verify-email");
+                }, 1000)
+
+
+            } else {
+                setTimeout(() => {
+                    setLoginStatus(true);
+                    setIsLoginSuccesful(false);
+                    addToast(data.message, { appearance: 'error' });
+                    setIsisLoginInProgress(false);
+                }, 1000)
+            }
+
+        });
+    }
+
 
     return (
         <div className='main-login'>
@@ -99,30 +122,23 @@ const Login = () => {
                 <div className="left-side">
                 <img src={companyLogo} className="companyLogo" id='img' alt="" />
                     <div className="img-class">
-                        <h1 className='textWhite'><u>Login</u></h1>
+                        <h1 className='textWhite'><u>Create Account</u></h1>
                     </div>
 
                     <form className='formStyle' onSubmit={handlesubmit}>
-                        <label htmlFor="emil1">Employee number</label>
-                        <input placeholder="Enter employee number..." required={true} type="text" value={emailval}
+                        <label htmlFor="emil1">Enter your email address to activate account.</label>
+                        <input placeholder="Enter your email address..." required={true} type="email" value={emailval}
                             onChange={(e) => { setemailval(e.target.value) }} id="emil1" />
-                        <label htmlFor="pwd1">Password</label>
-                        <input  placeholder="Enter password" type="password" required={true} autoComplete="false"
-                            value={passval} onChange={(e) => { setpassval(e.target.value) }}
-                            id="pwd1" />
-                           
-                        <h4 className='forgotPasswordLink'><Link className='link' to='/forgot-password'>Forgot password ?</Link></h4>
-                   
                             {isLoginInProgress === true ? <button id="sub_butt"><CircularProgress
                                                 size={16}
                                                 color="secondary"
                                                 className="buttonProgress"
-                                            /></button>  : <button type="submit" id="sub_butt">Login</button>}
+                                            /></button>  : <button type="submit" id="sub_butt">Send</button>}
                         
                     </form>
 
                     <div className="createAccount">
-                        <h4 className='createAccountText'>Dont have an account ?<Link className='createAccountLink' to='/create-account'>Click here</Link></h4>
+                        <h4><Link className='createAccountLink' to='/'>Back to login</Link></h4>
                     </div>
 
                 </div>
@@ -131,4 +147,4 @@ const Login = () => {
     )
 }
 
-export default Login;
+export default CreateAccount;
