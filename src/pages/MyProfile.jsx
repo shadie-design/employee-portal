@@ -670,7 +670,7 @@ const MyProfile = () => {
                               <Grid item lg={6} md={6} sm={12} xs={12}>
                                 <button
                                   className="p-2 hover:drop-shadow-xl hover:bg-light-gray"
-                                  style={{ backgroundColor: "green", color: "white" ,borderRadius: '10px'}}
+                                  style={{ backgroundColor: "green", color: "white", borderRadius: '10px' }}
                                   onClick={() => setOpen(!open)}
                                 >
                                   {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
@@ -730,7 +730,7 @@ const MyProfile = () => {
                                     className="p-2 w-full hover:drop-shadow-xl hover:bg-light-gray"
                                     style={{ backgroundColor: currentColor, color: text3color, borderRadius: '10px' }}
                                   >
-                                    <Settings /> 
+                                    <Settings />
                                     <span className="pl-2">Change Password</span>
                                   </button>
                                   : ""}
@@ -771,7 +771,24 @@ const MyProfile = () => {
 
                               </Grid>
                             </Grid>
+                            <Grid container spacing={6}>
+                              <Grid item lg={6} md={6} sm={12} xs={12}>
+                                <TextValidator
+                                  className="mb-4 w-full"
+                                  label="Last login date"
+                                  onChange={handleChange}
+                                  name="loginDate"
+                                  disabled="true"
+                                  type="text"
+                                  value={'16 Feb 2023  12:45'}
+                                  validators={['required']}
+                                  errorMessages={['this field is required']}
+                                />
+                              </Grid>
+                              <Grid item lg={6} md={6} sm={12} xs={12}>
 
+                              </Grid>
+                            </Grid>
 
 
                           </div>
