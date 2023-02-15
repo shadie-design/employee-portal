@@ -7,7 +7,7 @@
     height: inherit;
     margin: 5px auto 0;
     word-break: break-all;
-    border: 0.05px solid rgba(115, 109, 109, 0.215);
+    border: 0.05px solid rgba(115, 109, 109, 0);
   }
   
   .bloc-tabs {
