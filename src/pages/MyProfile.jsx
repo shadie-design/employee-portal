@@ -775,21 +775,34 @@ const MyProfile = () => {
                               <Grid item lg={6} md={6} sm={12} xs={12}>
                                 <TextValidator
                                   className="mb-4 w-full"
-                                  label="Last login date"
+                                  label="User role"
                                   onChange={handleChange}
-                                  name="loginDate"
+                                  name="userrole"
                                   disabled="true"
                                   type="text"
-                                  value={'16 Feb 2023  12:45'}
-                                  validators={['required']}
-                                  errorMessages={['this field is required']}
+                                  value={'Employee'}
                                 />
                               </Grid>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
 
                               </Grid>
                             </Grid>
+                            <Grid container spacing={6}>
+                              <Grid item lg={6} md={6} sm={12} xs={12}>
+                                <TextValidator
+                                  className="mb-4 w-full"
+                                  label="Last login date"
+                                  onChange={handleChange}
+                                  name="loginDate"
+                                  disabled="true"
+                                  type="text"
+                                  value={'16 Feb 2023  12:45'}
+                                />
+                              </Grid>
+                              <Grid item lg={6} md={6} sm={12} xs={12}>
 
+                              </Grid>
+                            </Grid>
 
                           </div>
 
