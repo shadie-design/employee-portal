@@ -88,6 +88,7 @@ const Login = () => {
             SetCookie('TenantId', data.data.tenantId);
             SetCookie('Id', data.data.id);
             SetCookie('Token', data.data.token);
+            SetCookie('IsLoggedIn', true);
 
             setTimeout(() => {
                 setIsisLoginInProgress(false);

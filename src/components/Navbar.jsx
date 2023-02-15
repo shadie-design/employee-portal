@@ -9,6 +9,7 @@ import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import avatar from '../data/avatar.jpg';
 import { Cart, Chat, Notification, UserProfile } from '.';
 import { useStateContext } from '../contexts/ContextProvider';
+import { useNavigate  } from "react-router-dom";
 import SetCookie from '../../src/Hooks/SetCookie';
 import GetCookie from '../../src/Hooks/GetCookie';
 import RemoveCookie from '../../src/Hooks/RemoveCookie';
@@ -31,8 +32,12 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
 
 const Navbar = () => {
   const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
-
+  let history = useNavigate ();
+  const loggedIn = GetCookie('IsLoggedIn');
   useEffect(() => {
+    if(loggedIn === "false"){
+      history("/");
+    }
     const handleResize = () => setScreenSize(window.innerWidth);
 
     window.addEventListener('resize', handleResize);

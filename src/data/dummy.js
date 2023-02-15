@@ -1,7 +1,7 @@
 import React from 'react';
 import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutlineBarChart, AiOutlineStock } from 'react-icons/ai';
 import { FiShoppingBag, FiEdit, FiPieChart,FiHome, FiBarChart, FiCreditCard, FiStar, FiShoppingCart, FiSettings, FiUser, FiCalendar, FiBell } from 'react-icons/fi';
-import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft } from 'react-icons/bs';
+import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft, BsPhone, BsEnvelope, BsGrid } from 'react-icons/bs';
 import { BiColorFill } from 'react-icons/bi';
 import { IoMdContacts } from 'react-icons/io';
 import { RiContactsLine, RiStockLine } from 'react-icons/ri';
@@ -22,7 +22,7 @@ import product5 from './product5.jpg';
 import product6 from './product6.jpg';
 import product7 from './product7.jpg';
 import product8 from './product8.jpg';
-
+import GetCookie from '../../src/Hooks/GetCookie';
 export const gridOrderImage = (props) => (
   <div>
     <img
@@ -849,6 +849,39 @@ export const userProfileData = [
     desc: 'Activities and Daily Tasks',
     iconColor: 'rgb(255, 244, 229)',
     iconBg: 'rgb(254, 201, 15)',
+    link:'/calendar'
+  },
+];
+
+export const userProfileSummaryData = [
+  {
+    icon: <FiUser />,
+    title: 'Full Name',
+    desc: 'James X White',
+    iconColor: '#03C9D7',
+    iconBg: '#E5FAFB',
+  },
+  {
+    icon: <BsPhone />,
+    title: 'Phone number',
+    desc: GetCookie('Phone'),
+    iconColor: 'rgb(0, 194, 146)',
+    iconBg: 'rgb(235, 250, 242)',
+  },
+  {
+    icon: <BsEnvelope />,
+    title: 'Email',
+    desc: GetCookie('Email'),
+    iconColor: 'rgb(255, 244, 229)',
+    iconBg: 'rgb(254, 201, 15)',
+    link:'/calendar'
+  },
+  {
+    icon: <BsGrid />,
+    title: 'Employee Number',
+    desc: GetCookie('Username'),
+    iconColor: 'rgb(255, 244, 229)',
+    iconBg: 'rgb(167, 222, 176)',
     link:'/calendar'
   },
 ];

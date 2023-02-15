@@ -25,7 +25,7 @@ const UserProfile = () => {
     RemoveCookie("Phone");
     RemoveCookie("Token");
     RemoveCookie("TenantId");
-    RemoveCookie("isLoggedIn");
+    SetCookie('IsLoggedIn', false);
   }
 
   return (
