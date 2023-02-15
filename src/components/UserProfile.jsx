@@ -7,21 +7,25 @@ import { useStateContext } from '../contexts/ContextProvider';
 import avatar from '../data/avatar.jpg';
 import { FiLogOut } from 'react-icons/fi';
 
+import SetCookie from '../../src/Hooks/SetCookie';
+import GetCookie from '../../src/Hooks/GetCookie';
+import RemoveCookie from '../../src/Hooks/RemoveCookie';
+
 const UserProfile = () => {
   const { currentColor,setIsClicked } = useStateContext();
   let history = useNavigate();
-  const userName = localStorage.getItem('Username');
-  const userEmail = localStorage.getItem('Email');
-  const phoneNumber = localStorage.getItem('Phone');
+  const userName = GetCookie('Username');
+  const userEmail = GetCookie('Email');
+  const phoneNumber = GetCookie('Phone');
 
   const logout = async () => {
     await history("/");
-    localStorage.removeItem("Username");
-    localStorage.removeItem("Email");
-    localStorage.removeItem("Phone");
-    localStorage.removeItem("Token");
-    localStorage.removeItem("TenantId");
-    localStorage.removeItem("isLoggedIn");
+    RemoveCookie("Username");
+    RemoveCookie("Email");
+    RemoveCookie("Phone");
+    RemoveCookie("Token");
+    RemoveCookie("TenantId");
+    RemoveCookie("isLoggedIn");
   }
 
   return (

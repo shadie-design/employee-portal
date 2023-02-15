@@ -8,6 +8,9 @@ import { useStateContext } from '../../../contexts/ContextProvider';
 import {CircularProgress,} from '@material-ui/core';
 import { useToasts } from "react-toast-notifications";
 import Api from "../../../contexts/Api"
+import SetCookie from '../../../Hooks/SetCookie';
+import GetCookie from '../../../Hooks/GetCookie';
+import RemoveCookie from '../../../Hooks/RemoveCookie';
 const ForgotPassword = () => {
     const { setLoginStatus, isLoggedIn } = useStateContext();
     const initialValue = useRef(true);
@@ -29,7 +32,7 @@ const ForgotPassword = () => {
         const Code = "";
         const Email = emailEntered;
         const user = {Code,Email};
-        localStorage.setItem('Email',Email);
+        SetCookie('Email',Email);
         fetch(LoginUrl, {
             method: 'POST',
             headers: {
@@ -44,7 +47,7 @@ const ForgotPassword = () => {
                 if (data.success === true) {
                     setLoginStatus(true);
                     setIsLoginSuccesful(true)
-                    localStorage.setItem('Email',Email);
+                    SetCookie('Email',Email);
                         setIsisLoginInProgress(false);
                         addToast(data.message, { appearance: 'success' });
                         history("/verify-account");

@@ -8,6 +8,9 @@ import { useStateContext } from '../../../contexts/ContextProvider';
 import { CircularProgress, } from '@material-ui/core';
 import { useToasts } from "react-toast-notifications";
 import Api from "../../../contexts/Api"
+import SetCookie from '../../../Hooks/SetCookie';
+import GetCookie from '../../../Hooks/GetCookie';
+import RemoveCookie from '../../../Hooks/RemoveCookie';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 const ResetPassword = () => {
     const { setLoginStatus, isLoggedIn } = useStateContext();

@@ -9,6 +9,11 @@ import { CircularProgress, } from '@material-ui/core';
 import { useToasts } from "react-toast-notifications";
 import Api from "../../../contexts/Api"
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
+import SetCookie from '../../../Hooks/SetCookie';
+import GetCookie from '../../../Hooks/GetCookie';
+import RemoveCookie from '../../../Hooks/RemoveCookie';
+
+
 const SetPassword = () => {
     const { setLoginStatus, isLoggedIn } = useStateContext();
     const initialValue = useRef(true);
@@ -23,8 +28,8 @@ const SetPassword = () => {
     const { addToast } = useToasts();
 
     useEffect(() => {
-        setemailval(localStorage.getItem('Email'));
-        setEmployeeNumber(localStorage.getItem('Username'));
+        setemailval(GetCookie('Email'));
+        setEmployeeNumber(GetCookie('Username'));
     }, []);
 
     const [passwordType, setPasswordType] = useState("password");

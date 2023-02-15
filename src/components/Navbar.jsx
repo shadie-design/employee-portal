@@ -9,7 +9,9 @@ import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import avatar from '../data/avatar.jpg';
 import { Cart, Chat, Notification, UserProfile } from '.';
 import { useStateContext } from '../contexts/ContextProvider';
-
+import SetCookie from '../../src/Hooks/SetCookie';
+import GetCookie from '../../src/Hooks/GetCookie';
+import RemoveCookie from '../../src/Hooks/RemoveCookie';
 const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
   <TooltipComponent content={title} position="BottomCenter">
     <button
@@ -49,7 +51,7 @@ const Navbar = () => {
   }, [screenSize]);
 
   const handleActiveMenu = () => setActiveMenu(!activeMenu);
-  const userName = localStorage.getItem('Username');
+  const userName = GetCookie('Username');
   return (
     <div className="flex justify-between p-2 md:ml-6 md:mr-6 relative">
 

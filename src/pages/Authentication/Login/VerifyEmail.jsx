@@ -8,6 +8,10 @@ import { useStateContext } from '../../../contexts/ContextProvider';
 import { CircularProgress, } from '@material-ui/core';
 import { useToasts } from "react-toast-notifications";
 import Api from "../../../contexts/Api"
+import SetCookie from '../../../Hooks/SetCookie';
+import GetCookie from '../../../Hooks/GetCookie';
+import RemoveCookie from '../../../Hooks/RemoveCookie';
+
 const VerifyEmail = () => {
     const { setLoginStatus, isLoggedIn } = useStateContext();
     const initialValue = useRef(true);
@@ -21,7 +25,7 @@ const VerifyEmail = () => {
     const { addToast } = useToasts();
 
     useEffect(() => {
-        setEmailEntered(localStorage.getItem('Email'));
+        setEmailEntered(GetCookie('Email'));
     }, []);
 
     const handlesubmit = (event) => {

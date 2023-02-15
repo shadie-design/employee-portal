@@ -8,6 +8,10 @@ import { useStateContext } from '../../../contexts/ContextProvider';
 import {CircularProgress,} from '@material-ui/core';
 import { useToasts } from "react-toast-notifications";
 import Api from "../../../contexts/Api"
+import SetCookie from '../../../Hooks/SetCookie';
+import GetCookie from '../../../Hooks/GetCookie';
+import RemoveCookie from '../../../Hooks/RemoveCookie';
+
 const CreateAccount = () => {
     const { setLoginStatus, isLoggedIn } = useStateContext();
     const initialValue = useRef(true);
@@ -37,11 +41,11 @@ const CreateAccount = () => {
      if (data.success === true) {
         setLoginStatus(true);
         setIsLoginSuccesful(true);       
-            localStorage.setItem('Username', data.data.userName);
-            localStorage.setItem('Email', data.data.email);
-            localStorage.setItem('Phone', data.data.phoneNumber);
-            localStorage.setItem('TenantId', "");
-            localStorage.setItem('Token', "");
+        SetCookie('Username', data.data.userName);
+        SetCookie('Email', data.data.email);
+        SetCookie('Phone', data.data.phoneNumber);
+        SetCookie('TenantId', "");
+        SetCookie('Token', "");
           RegisterUser(data.data.userName,data.data.email,data.data.phoneNumber);
 
            

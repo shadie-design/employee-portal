@@ -8,12 +8,17 @@ import { useStateContext } from '../../../contexts/ContextProvider';
 import {CircularProgress,} from '@material-ui/core';
 import { useToasts } from "react-toast-notifications";
 import Api from "../../../contexts/Api"
+
+import SetCookie from '../../../Hooks/SetCookie';
+import GetCookie from '../../../Hooks/GetCookie';
+import RemoveCookie from '../../../Hooks/RemoveCookie';
+
 const Login = () => {
     const { setLoginStatus, isLoggedIn } = useStateContext();
     const initialValue = useRef(true);
     let history = useNavigate ();
 
-    const [emailval, setemailval] = useState("");
+    const [emailNumberval, setemailval] = useState("");
     const [passval, setpassval] = useState("");
 
     const [isLoginSuccesful, setIsLoginSuccesful] = useState(false);
@@ -24,8 +29,40 @@ const Login = () => {
         event.preventDefault();        
         setIsisLoginInProgress(true); 
        // fetch method
+       const LoginUrl = Api.AppBaseUrl + 'EmployeePortal/Employee/GetByEmail/' + emailNumberval;
+     fetch(LoginUrl, {
+        method: 'GET',
+        headers: { 
+            'Accept' : 'application/json',
+            'Content-Type': 'application/json'
+           },
+      })
+    .then(res => res.json())
+    .then((data) => {
+    console.log(data);
+     if (data.success === true) {
+        setLoginStatus(true);
+        setIsLoginSuccesful(true);       
+        login();
+
+           
+        
+    }else{
+        setLoginStatus(true);
+        setIsLoginSuccesful(false);
+        addToast(data.errorMessage, { appearance: 'error' }); 
+        setIsisLoginInProgress(false);
+    }
+
+    });
+    }
+
+
+    const login = () => {       
+        setIsisLoginInProgress(true); 
+       // fetch method
        const LoginUrl = Api.AppBaseUrl + 'Login';
-       const username = emailval;
+       const username = emailNumberval;
        const password = passval;
        const sourceSystem = "employee portal";
        const user = { username, password,sourceSystem };
@@ -44,12 +81,14 @@ const Login = () => {
      if (data.success === true) {
         setLoginStatus(true);
         setIsLoginSuccesful(true);       
-            localStorage.setItem('Username', data.data.userName);
-            localStorage.setItem('Email', data.data.email);
-            localStorage.setItem('Phone', data.data.phoneNumber);
-            localStorage.setItem('TenantId', data.data.tenantId);
-            localStorage.setItem('Id', data.data.id);
-            localStorage.setItem('Token', data.data.token);
+            //set cookies
+            SetCookie('Username', data.data.userName);
+            SetCookie('Email', data.data.email);
+            SetCookie('Phone', data.data.phoneNumber);
+            SetCookie('TenantId', data.data.tenantId);
+            SetCookie('Id', data.data.id);
+            SetCookie('Token', data.data.token);
+
             setTimeout(() => {
                 setIsisLoginInProgress(false);
             addToast(data.message, { appearance: 'success' }); 
@@ -103,8 +142,8 @@ const Login = () => {
                     </div>
 
                     <form className='formStyle' onSubmit={handlesubmit}>
-                        <label htmlFor="emil1">Employee number</label>
-                        <input placeholder="Enter employee number..." required={true} type="text" value={emailval}
+                        <label htmlFor="emil1">Username</label>
+                        <input placeholder="‘Enter your email or employee number" required={true} type="text" value={emailNumberval}
                             onChange={(e) => { setemailval(e.target.value) }} id="emil1" />
                         <label htmlFor="pwd1">Password</label>
                         <input  placeholder="Enter password" type="password" required={true} autoComplete="false"
