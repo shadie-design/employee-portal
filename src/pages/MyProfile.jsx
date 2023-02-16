@@ -1,32 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { FiEdit, FiSettings } from 'react-icons/fi';
+import {FiSettings } from 'react-icons/fi';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
-import { Navbar, Footer, Sidebar, ThemeSettings } from '../components';
+import { Navbar, Sidebar, ThemeSettings } from '../components';
 import { useStateContext } from '../contexts/ContextProvider';
 import { useNavigate } from "react-router-dom";
 
-import { BsCurrencyDollar } from 'react-icons/bs';
-import { GoPrimitiveDot } from 'react-icons/go';
-import { IoIosMore } from 'react-icons/io';
-import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
-import { Stacked, Pie, Button, LineChart, SparkLine } from '../components';
-import { earningData, medicalproBranding, recentTransactions, weeklyStats, dropdownData, SparklineAreaData, ecomPieChartData } from '../data/dummy';
-import product9 from '../data/product9.jpg';
-
 import SetCookie from '../../src/Hooks/SetCookie';
 import GetCookie from '../../src/Hooks/GetCookie';
-import RemoveCookie from '../../src/Hooks/RemoveCookie';
 import avatar from '../data/avatar.jpg';
-import { MdEdit, MdOutlineCancel } from 'react-icons/md';
+import { MdEdit,} from 'react-icons/md';
 import { userProfileSummaryData } from '../data/dummy';
 import './MyProfile.css';
 //for form
 import { makeStyles } from '@material-ui/core/styles'
-import { FormControl, InputLabel, Select as MuiSelect, MenuItem, FormHelperText } from '@material-ui/core';
-import Controls from "../components/controls/Controls";
-import { useForm, Form } from './useForm';
 import { useToasts } from "react-toast-notifications";
-import EmployeeForm from '../../src/components/EmployeeForm';
 //custom form
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import {
@@ -297,8 +284,6 @@ const MyProfile = () => {
       })
         .then(res => res.json())
         .then((data) => {
-          console.log(data);
-          console.log(user);
           if (data.success === true) {
             setTimeout(() => {
               setChangeInProgress(false);

@@ -37,7 +37,6 @@ const CreateAccount = () => {
       })
     .then(res => res.json())
     .then((data) => {
-    console.log(data);
      if (data.success === true) {
         setLoginStatus(true);
         setIsLoginSuccesful(true);       
@@ -76,7 +75,6 @@ const CreateAccount = () => {
     })
         .then(res => res.json())
         .then((data) => {
-            console.log(data);
             if (data.success === true) {
                 setLoginStatus(true);
                 setIsLoginSuccesful(true);
