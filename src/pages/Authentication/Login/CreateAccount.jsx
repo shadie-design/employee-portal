@@ -135,7 +135,7 @@ const CreateAccount = () => {
                             onChange={(e) => { setemailval(e.target.value) }} id="emil1" />
                             {isLoginInProgress === true ? <button id="sub_butt"><CircularProgress
                                                 size={16}
-                                                color="secondary"
+                                                style={{color : "white"}}
                                                 className="buttonProgress"
                                             /></button>  : <button type="submit" id="sub_butt">Send</button>}
                         

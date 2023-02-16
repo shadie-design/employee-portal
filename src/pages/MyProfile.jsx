@@ -188,6 +188,7 @@ const MyProfile = () => {
   const currentTabColor = "#A7DEB0"
   const toggleTab = (index) => {
     setToggleState(index);
+    setOpen(false);
     if (index === 1) {
       setText1color("white");
       setText2color("");
@@ -302,6 +303,7 @@ const MyProfile = () => {
             setTimeout(() => {
               setChangeInProgress(false);
               addToast(data.message, { appearance: 'success' });
+              setOpen(false);
               history("/");
             }, 1000)
 
