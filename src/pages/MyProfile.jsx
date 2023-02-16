@@ -296,14 +296,14 @@ const MyProfile = () => {
                   </div>
                   <div>
                     {userProfileSummaryData.map((item, index) => (
-                      <div key={index} className="flex gap-5 border-b-1 border-color p-4 hover:bg-light-gray cursor-pointer  dark:hover:bg-[#42464D]">
-                        <button
-                          type="button"
+                      <div key={index} className="flex gap-5 border-b-1 border-color p-4 ">
+                        <div
+                        
                           style={{ color: item.iconColor, backgroundColor: item.iconBg }}
                           className=" text-xl rounded-lg p-3 hover:bg-light-gray"
                         >
                           {item.icon}
-                        </button>
+                        </div>
 
                         <div>
                           <p className="font-semibold dark:text-gray-200 ">{item.title}</p>

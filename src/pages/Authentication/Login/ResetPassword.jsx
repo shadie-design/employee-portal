@@ -140,8 +140,6 @@ const ResetPassword = () => {
                             value={confirmedPassval} onChange={(e) => { setConfirmPassval(e.target.value) }}
                             id="pwd1" />
 
-                        <h4 className='forgotPasswordLink'><Link className='link' to='/verify-account'>Verify account ?</Link></h4>
-
                         {isLoginInProgress === true ? <button id="sub_butt"><CircularProgress
                             size={16}
                             color="secondary"
