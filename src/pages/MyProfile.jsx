@@ -27,13 +27,15 @@ import Controls from "../components/controls/Controls";
 import { useForm, Form } from './useForm';
 import { useToasts } from "react-toast-notifications";
 import EmployeeForm from '../../src/components/EmployeeForm';
-
 //custom form
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import {
   Icon,
+  Typography,
+  CircularProgress,
   Grid,
   Radio,
+  TextField,
   RadioGroup,
   FormControlLabel,
   Checkbox,
@@ -42,25 +44,76 @@ import {
 import { KeyboardArrowDown, KeyboardArrowUp } from '@material-ui/icons'
 import Send from '@material-ui/icons/Send'
 import Settings from "@material-ui/icons/Settings"
-
+import Api from "../contexts/Api"
 import 'date-fns'
-const DropDown = ({ currentMode }) => (
-  <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
-    <DropDownListComponent id="time" fields={{ text: 'Time', value: 'Id' }} style={{ border: 'none', color: (currentMode === 'Dark') && 'white' }} value="1" dataSource={dropdownData} popupHeight="220px" popupWidth="120px" />
-  </div>
-);
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      minWidth: 230,
+
+
+    },
+    minHeight: 800
+  },
+  radio: {
+    '&$checked': {
+      color: '#4B8DF8'
+    }
+  },
+  checked: {}
+
+}))
 
 const MyProfile = () => {
   const { isLoggedIn, setIsLoggedIn, setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
   let history = useNavigate();
+  const classes = useStyles();
+  const { addToast } = useToasts();
   const userName = GetCookie('Username');
   const userEmail = GetCookie('Email');
   const phoneNumber = GetCookie('Phone');
+
+  //--form fields start
+  //security info
+  const [oldPassword, setOldPassword] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  //employment details
+  const [departmentName, setDepartmentName] = useState("");
+  const [employeeStatus, setEmployeeStatus] = useState(false);
+  const [jobTitleName, setJobTitleName] = useState("");
+  const [managerJobTitleName, setManagerJobTitleName] = useState("");
+  const [natureOfEmploymentName, setNatureOfEmploymentName] = useState("");
+  const [subDepartmentName, setSubDepartmentName] = useState("");
+  const [employmentDate, setEmploymentDate] = useState("");
+  const [reportToName, setReportToName] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [number, setNumber] = useState("");
+  const [managerName, setManagerName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [surName, setSurName] = useState("");
+  const [otherNames, setOtherNames] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [gender, setGender] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [maritalStatus, setMaritalStatus] = useState("");
+  const [religionName, setReligionName] = useState("");
+  const [email, setEmail] = useState("");
+  const [personalPhoneNumber, setPersonalPhoneNumber] = useState("");
+  const [identityDocumentNumber, setIdentityDocumentNumber] = useState("");
+  const [physicalAddress, setPhysicalAddress] = useState("");
+  const [postalAddress, setPostalAddress] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  //--form fields end
+
+
   useEffect(() => {
     const currentThemeColor = localStorage.getItem('colorMode');
     const currentThemeMode = localStorage.getItem('themeMode');
     const currentLoginStatus = localStorage.getItem('isLoggedIn');
+    GetEmployeeData();
     if (currentThemeColor && currentThemeMode) {
       setCurrentColor(currentColor);
       setCurrentMode(currentThemeMode);
@@ -71,6 +124,58 @@ const MyProfile = () => {
     toggleTab(1);
 
   }, []);
+
+  const GetEmployeeData = () => {
+    const employeeDataUrl = Api.AppBaseUrl + 'EmployeePortal/Employee/GetEmployeeData/' + userName;
+    fetch(employeeDataUrl, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    })
+      .then(res => res.json())
+      .then((data) => {
+        //console.log(data);
+        if (data.success === true) {
+          SetCookie('IsLoggedIn', true);
+          //employment details
+
+          setDepartmentName(data.data.departmentName);
+
+          setEmployeeStatus(data.data.employeeStatus);
+          setEmploymentDate(data.data.employmentDate);
+          setJobTitleName(data.data.jobTitleName);
+          setManagerJobTitleName(data.data.managerJobTitleName);
+          setNatureOfEmploymentName(data.data.natureOfEmploymentName);
+          setNumber(data.data.number);
+          setSubDepartmentName(data.data.subDepartmentName)
+          setReportToName(data.data.reportToName);
+          setStartDate(data.data.startDate);
+          setManagerName(data.data.managerName)
+          //bio data
+          setFirstName(data.data.firstName)
+          setSurName(data.data.surName)
+          setOtherNames(data.data.otherNames);
+          setDateOfBirth(data.data.dateOfBirth);
+          setGender(data.data.gender);
+          setFullName(data.data.fullName);
+          setMaritalStatus(data.data.maritalStatus);
+          setReligionName(data.data.religionName);
+          setEmail(data.data.email);
+          setPersonalPhoneNumber(data.data.personalPhoneNumber);
+          setIdentityDocumentNumber(data.data.identityDocumentNumber)
+          setPhysicalAddress(data.data.physicalAddress)
+          setPostalAddress(data.data.postalAddress)
+          setPostalCode(data.data.postalCode);
+
+        } else {
+          SetCookie('IsLoggedIn', false);
+          addToast(data.errorMessage, { appearance: 'error' });
+        }
+
+      });
+  }
   const [editProfileImage, setEditProfileImage] = useState();
   //for tabs
   const [toggleState, setToggleState] = useState(1);
@@ -126,15 +231,26 @@ const MyProfile = () => {
 
   useEffect(() => {
     ValidatorForm.addValidationRule('isPasswordMatch', (value) => {
-      console.log(value)
-
-      if (value !== state.password) {
+      if (value !== password) {
         return false
       }
       return true
     })
     return () => ValidatorForm.removeValidationRule('isPasswordMatch')
-  }, [state.password])
+  }, [password])
+
+  useEffect(() => {
+
+  }, [])
+
+  const onChangePassword = (event) => {
+    event.preventDefault()
+    if (password !== "" && confirmPassword !== "" && password === confirmPassword) {
+      setIsChangePasswordFormValid(true);
+    } else {
+      setIsChangePasswordFormValid(false);
+    }
+  }
 
   const handleSubmit = (event) => {
     // console.log("submitted");
@@ -149,24 +265,60 @@ const MyProfile = () => {
     })
   }
 
+
+
   //open security grid
   const [open, setOpen] = React.useState(false);
+  const [changeInProgress, setChangeInProgress] = useState(false);
 
-  const {
-    username,
-    firstName,
-    creditCard,
-    department,
-    subDepartment,
-    role,
-    mobile,
-    oldPassword,
-    password,
-    confirmPassword,
-    gender,
-    date,
-    email,
-  } = state
+  //change password method
+  const handlePasswordChange = (event) => {
+    event.preventDefault();
+    setChangeInProgress(true);
+    // fetch method
+    const setPassowrdUrl = Api.AppBaseUrl + 'ChangePassword';
+    const Id = GetCookie("Id");
+    const CurrentPassword = oldPassword;
+    const NewPassword = password;
+    const user = { Id, CurrentPassword, NewPassword };
+
+    if (confirmPassword !== NewPassword) {
+      addToast("Password mismatch", { appearance: 'warning' });
+      setChangeInProgress(false);
+    } else {
+      fetch(setPassowrdUrl, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+      })
+        .then(res => res.json())
+        .then((data) => {
+          console.log(data);
+          console.log(user);
+          if (data.success === true) {
+            setTimeout(() => {
+              setChangeInProgress(false);
+              addToast(data.message, { appearance: 'success' });
+              history("/");
+            }, 1000)
+
+
+          } else {
+            setTimeout(() => {
+              addToast(data.message + data.errorMessage, { appearance: 'error' });
+              setChangeInProgress(false);
+            }, 1000)
+          }
+
+        });
+    }
+  }
+
+
+
   return (
 
 
@@ -286,7 +438,6 @@ const MyProfile = () => {
                   <div className="mt-5">
                     {editProfileImage === true ? <button
                       type="button"
-                      onClick={() => { logout(), setIsClicked(true) }}
                       style={{ backgroundColor: currentColor, color: "white", borderRadius: "10px" }}
                       className={`  p-2 w-full hover:drop-shadow-xl hover:bg-none`}
                     >Change profile picture
@@ -298,7 +449,7 @@ const MyProfile = () => {
                     {userProfileSummaryData.map((item, index) => (
                       <div key={index} className="flex gap-5 border-b-1 border-color p-4 ">
                         <div
-                        
+
                           style={{ color: item.iconColor, backgroundColor: item.iconBg }}
                           className=" text-xl rounded-lg p-3 hover:bg-light-gray"
                         >
@@ -364,35 +515,43 @@ const MyProfile = () => {
                       <div
                         className={toggleState === 1 ? "tabcontent  active-content" : "tabcontent"}
                       >
-
-
-
                         <ValidatorForm onSubmit={handleSubmit} onError={() => null}>
                           <div style={{ paddingBottom: 20, paddingTop: 20 }}>
                             <Grid container spacing={6}>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
-                                <TextValidator
+                                <TextField
                                   className="mb-4 w-full"
                                   label="First name"
+                                  disabled={true}
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   type="text"
                                   name="firstname"
-                                  value={userName || ''}
-                                  validators={['required']}
-                                  errorMessages={['this field is required']}
+                                  variant="standard"
+                                  value={firstName || ''}
                                 />
                               </Grid>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
                                 <TextValidator
                                   className="mb-4 w-full"
                                   label="Sur name"
+                                  disabled={true}
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   type="text"
                                   name="surname"
-                                  value={userName || ''}
-                                  errorMessages={[
-                                    'this field is required',
-                                  ]}
+                                  value={surName || ''}
+
                                 />
                               </Grid>
                             </Grid>
@@ -401,11 +560,17 @@ const MyProfile = () => {
                                 <TextValidator
                                   className="mb-4 w-full"
                                   label="Other names"
+                                  disabled={true}
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   type="text"
                                   name="othername"
-                                  value={userName || ''}
-                                  validators={['required']}
+                                  value={otherNames || ''}
                                 />
                               </Grid>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -414,9 +579,15 @@ const MyProfile = () => {
                                   label="Full name"
                                   disabled={true}
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   type="text"
                                   name="fullname"
-                                  value={userName || ''}
+                                  value={fullName || ''}
                                 />
                               </Grid>
                             </Grid>
@@ -425,10 +596,17 @@ const MyProfile = () => {
                                 <TextValidator
                                   className="mb-4 w-full"
                                   label="Marital status"
+                                  disabled={true}
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   type="text"
                                   name="maritalstatus"
-                                  value={userName || ''}
+                                  value={maritalStatus || ''}
                                 />
                               </Grid>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -436,9 +614,16 @@ const MyProfile = () => {
                                   className="mb-4 w-full"
                                   label="Religion"
                                   onChange={handleChange}
+                                  disabled={true}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   type="text"
                                   name="religion"
-                                  value={userName || ''}
+                                  value={religionName || ''}
                                 />
                               </Grid>
                             </Grid>
@@ -447,10 +632,17 @@ const MyProfile = () => {
                                 <TextValidator
                                   className="mb-4 w-full"
                                   label="Phone Number"
+                                  disabled={true}
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   type="text"
                                   name="mobile"
-                                  value={phoneNumber || ''}
+                                  value={personalPhoneNumber || ''}
                                   validators={['required']}
                                   errorMessages={['this field is required']}
                                 />
@@ -459,15 +651,17 @@ const MyProfile = () => {
                                 <TextValidator
                                   className="mb-4 w-full"
                                   label="Email"
+                                  disabled={true}
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   type="email"
                                   name="email"
-                                  value={userEmail || ''}
-                                  validators={['required', 'isEmail']}
-                                  errorMessages={[
-                                    'this field is required',
-                                    'email is not valid',
-                                  ]}
+                                  value={email || ''}
                                 />
                               </Grid>
                             </Grid>
@@ -476,12 +670,17 @@ const MyProfile = () => {
                                 <TextValidator
                                   className="mb-4 w-full"
                                   label="ID number"
+                                  disabled={true}
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   type="text"
                                   name="idnumber"
-                                  value={mobile || ''}
-                                  validators={['required']}
-                                  errorMessages={['this field is required']}
+                                  value={identityDocumentNumber || ''}
                                 />
                               </Grid>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -490,40 +689,44 @@ const MyProfile = () => {
                                   label="Employee number"
                                   disabled={true}
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   type="text"
                                   name="employeenumber"
-                                  value={mobile || ''}
-                                  validators={['required']}
+                                  value={number || ''}
                                 />
                               </Grid>
                             </Grid>
                             <Grid container spacing={6}>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
-                                <FormLabel>Gender</FormLabel>
+                                <FormLabel style={{ color: (currentMode === 'Dark') && 'white' }}>Gender</FormLabel>
                                 <RadioGroup
                                   className="mb-4"
                                   value={gender || ''}
                                   name="gender"
-                                  Label="Gender"
                                   onChange={handleChange}
                                   row
                                 >
                                   <FormControlLabel
                                     value="Male"
-                                    control={<Radio color="default" />}
-                                    label="Male"
+                                    control={<Radio disabled={true} checked={gender === "Male"} color='default' disableRipple classes={{ root: classes.radio, checked: classes.checked }} />}
+                                    label={<Typography style={{ color: (currentMode === 'Dark') && 'white' }}>Male</Typography>}
                                     labelPlacement="end"
                                   />
                                   <FormControlLabel
                                     value="Female"
-                                    control={<Radio color="default" />}
-                                    label="Female"
+                                    control={<Radio disabled={true} checked={gender === "Female"} color='default' disableRipple classes={{ root: classes.radio, checked: classes.checked }} />}
+                                    label={<Typography style={{ color: (currentMode === 'Dark') && 'white' }}>Female</Typography>}
                                     labelPlacement="end"
                                   />
                                   <FormControlLabel
                                     value="Others"
-                                    control={<Radio color="default" />}
-                                    label="Others"
+                                    control={<Radio disabled={true} checked={gender === "Other"} color='default' disableRipple classes={{ root: classes.radio, checked: classes.checked }} />}
+                                    label={<Typography style={{ color: (currentMode === 'Dark') && 'white' }}>Other</Typography>}
                                     labelPlacement="end"
                                   />
                                 </RadioGroup>
@@ -532,24 +735,12 @@ const MyProfile = () => {
 
                               </Grid>
 
-                              <Grid item lg={6} md={6} sm={12} xs={12}>
-                                <button
-                                  type="submit"
-                                  onClick={() => { setIsClicked(true) }}
-                                  style={{ backgroundColor: currentColor, marginTop: "20px", color: "white", borderRadius: "10px" }}
-                                  className={`  p-2 w-full hover:drop-shadow-xl hover:bg-none`}
-                                >Update
-                                </button>
-                              </Grid>
                             </Grid>
 
                           </div>
 
 
                         </ValidatorForm>
-
-
-
                       </div>
 
                       <div
@@ -563,12 +754,16 @@ const MyProfile = () => {
                                   className="mb-4 w-full"
                                   label="Role"
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   type="text"
                                   disabled={true}
                                   name="role"
-                                  value={role || ''}
-                                  validators={['required']}
-                                  errorMessages={['this field is required']}
+                                  value={jobTitleName || ''}
                                 />
                               </Grid>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -576,13 +771,16 @@ const MyProfile = () => {
                                   className="mb-4 w-full"
                                   label="Department"
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   type="text"
                                   disabled={true}
                                   name="department"
-                                  value={department || ''}
-                                  errorMessages={[
-                                    'this field is required',
-                                  ]}
+                                  value={departmentName || ''}
                                 />
                               </Grid>
                             </Grid>
@@ -592,11 +790,16 @@ const MyProfile = () => {
                                   className="mb-4 w-full"
                                   label="Reporting to"
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   type="text"
                                   disabled={true}
                                   name="reportingto"
-                                  value={department || ''}
-                                  validators={['required']}
+                                  value={reportToName || ''}
                                 />
                               </Grid>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -605,9 +808,15 @@ const MyProfile = () => {
                                   label="Supervisor"
                                   disabled={true}
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   type="supervisor"
                                   name="supervisor"
-                                  value={department || ''}
+                                  value={managerName || ''}
                                 />
                               </Grid>
                             </Grid>
@@ -618,9 +827,15 @@ const MyProfile = () => {
                                   label="Date hired"
                                   disabled={true}
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   type="text"
                                   name="datehired"
-                                  value={department || ''}
+                                  value={employmentDate || ''}
                                 />
                               </Grid>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -629,9 +844,15 @@ const MyProfile = () => {
                                   label="Start date"
                                   disabled={true}
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   type="text"
                                   name="startdate"
-                                  value={department || ''}
+                                  value={startDate || ''}
                                 />
                               </Grid>
                             </Grid>
@@ -641,11 +862,12 @@ const MyProfile = () => {
                                   control={<Checkbox
                                     name="status"
                                     color="default"
-                                    checked={true}
+                                    checked={employeeStatus}
                                     disabled={true}
                                     onChange={handleChange}
+                                    style={{ color: (currentMode === 'Dark') && 'white' }}
                                   />}
-                                  label="Employee status"
+                                  label={<Typography style={{ color: (currentMode === 'Dark') && 'white' }}>Employee status</Typography>}
                                 />
                               </Grid>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -668,6 +890,27 @@ const MyProfile = () => {
                           <div style={{ paddingBottom: 20, paddingTop: 20 }}>
                             <Grid container spacing={6}>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
+                                <TextValidator
+                                  className="mb-4 w-full"
+                                  label="User Name"
+                                  disabled={true}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  name="username"
+                                  type="text"
+                                  value={userName || ''}
+                                />
+                              </Grid>
+                              <Grid item lg={6} md={6} sm={12} xs={12}>
+
+                              </Grid>
+                            </Grid>
+                            <Grid container spacing={6}>
+                              <Grid item lg={6} md={6} sm={12} xs={12}>
                                 <button
                                   className="p-2 hover:drop-shadow-xl hover:bg-light-gray"
                                   style={{ backgroundColor: "green", color: "white", borderRadius: '10px' }}
@@ -681,7 +924,13 @@ const MyProfile = () => {
                                 {open === true ? <TextValidator
                                   className="mb-4 w-full"
                                   label="Old Password"
-                                  onChange={handleChange}
+                                  onChange={(e) => { setOldPassword(e.target.value), onChangePassword, handleChange }}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   name="old password"
                                   type="text"
                                   value={oldPassword || ''}
@@ -691,49 +940,80 @@ const MyProfile = () => {
                                   : ""}
                               </Grid>
                             </Grid>
+                            {open === true ?
+                              <Grid container spacing={6}>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <TextValidator
+                                    className="mb-4 w-full"
+                                    label="New Password"
+                                    onChange={(e) => { setPassword(e.target.value), onChangePassword, handleChange }}
+                                    InputLabelProps={{
+                                      style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                    }}
+                                    InputProps={{
+                                      style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                    }}
+                                    name="password"
+                                    type="password"
+                                    value={password || ''}
+                                    validators={['required']}
+                                    errorMessages={['this field is required']}
+                                  />
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <TextValidator
+                                    className="mb-4 w-full"
+                                    label="Confirm New Password"
+                                    onChange={(e) => { setConfirmPassword(e.target.value), onChangePassword, handleChange }}
+                                    InputLabelProps={{
+                                      style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                    }}
+                                    InputProps={{
+                                      style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                    }}
+                                    name="confirmPassword"
+                                    type="password"
+                                    value={confirmPassword || ''}
+                                    validators={['required', 'isPasswordMatch']}
+                                    errorMessages={[
+                                      'this field is required',
+                                      "password didn't match",
+                                    ]}
+                                  />
+                                </Grid>
+                              </Grid>
+                              : ""}
                             <Grid container spacing={6}>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
-                                {open === true ? <TextValidator
-                                  className="mb-4 w-full"
-                                  label="New Password"
-                                  onChange={handleChange}
-                                  name="password"
-                                  type="password"
-                                  value={password || ''}
-                                  validators={['required']}
-                                  errorMessages={['this field is required']}
-                                /> : ""}
                               </Grid>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
-                                {open === true ? <TextValidator
-                                  className="mb-4 w-full"
-                                  label="Confirm New Password"
-                                  onChange={handleChange}
-                                  name="confirmPassword"
-                                  type="password"
-                                  value={confirmPassword || ''}
-                                  validators={['required', 'isPasswordMatch']}
-                                  errorMessages={[
-                                    'this field is required',
-                                    "password didn't match",
-                                  ]}
-                                /> : ""}
-                              </Grid>
-                            </Grid>
-                            <Grid container spacing={6}>
-                              <Grid item lg={6} md={6} sm={12} xs={12}>
-                              </Grid>
-                              <Grid item lg={6} md={6} sm={12} xs={12}>
-                                {open === true ?
+
+
+                                {open === true ? <div>
                                   <button
+                                    hidden={oldPassword === "" || password === "" || confirmPassword === "" || password !== confirmPassword}
                                     type='submit'
+                                    onClick={handlePasswordChange}
                                     className="p-2 w-full hover:drop-shadow-xl hover:bg-light-gray"
                                     style={{ backgroundColor: currentColor, color: text3color, borderRadius: '10px' }}
                                   >
+                                    {changeInProgress === false ?<div><span className="pl-2">Change Password</span> <Settings /></div> : <CircularProgress size={16} style={{color : "white"}} className="buttonProgress"/>}
+                                    
+                                  </button>
+                                  <button
+                                    hidden={oldPassword !== "" && password !== "" && confirmPassword !== "" && password === confirmPassword}
+                                    className="p-2 w-full hover:drop-shadow-xl hover:bg-light-gray"
+                                    style={{ backgroundColor: "gray", color: text3color, borderRadius: '10px' }}
+                                  >
                                     <Settings />
                                     <span className="pl-2">Change Password</span>
+
                                   </button>
-                                  : ""}
+                                </div>
+                                  : " "}
+
+
+
 
                               </Grid>
                             </Grid>
@@ -746,8 +1026,9 @@ const MyProfile = () => {
                                     checked={true}
                                     disabled={true}
                                     onChange={handleChange}
+                                    style={{ color: (currentMode === 'Dark') && 'white' }}
                                   />}
-                                  label="Email verified"
+                                  label={<Typography style={{ color: (currentMode === 'Dark') && 'white' }}>Email verified</Typography>}
                                 />
                               </Grid>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -763,8 +1044,9 @@ const MyProfile = () => {
                                     checked={true}
                                     disabled={true}
                                     onChange={handleChange}
+                                    style={{ color: (currentMode === 'Dark') && 'white' }}
                                   />}
-                                  label="Phone number verified"
+                                  label={<Typography style={{ color: (currentMode === 'Dark') && 'white' }}>Phone number verified</Typography>}
                                 />
                               </Grid>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -777,8 +1059,14 @@ const MyProfile = () => {
                                   className="mb-4 w-full"
                                   label="User role"
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   name="userrole"
-                                  disabled="true"
+                                  disabled={true}
                                   type="text"
                                   value={'Employee'}
                                 />
@@ -793,8 +1081,14 @@ const MyProfile = () => {
                                   className="mb-4 w-full"
                                   label="Last login date"
                                   onChange={handleChange}
+                                  InputLabelProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
+                                  InputProps={{
+                                    style: { border: 'none', color: (currentMode === 'Dark') && 'white' }
+                                  }}
                                   name="loginDate"
-                                  disabled="true"
+                                  disabled={true}
                                   type="text"
                                   value={'16 Feb 2023  12:45'}
                                 />

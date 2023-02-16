@@ -29,7 +29,7 @@ const Login = () => {
         event.preventDefault();        
         setIsisLoginInProgress(true); 
        // fetch method
-       const LoginUrl = Api.AppBaseUrl + 'EmployeePortal/Employee/GetByEmail/' + emailNumberval;
+       const LoginUrl = Api.AppBaseUrl + 'EmployeePortal/Employee/ConfirmEmployeeExists/' + emailNumberval;
      fetch(LoginUrl, {
         method: 'GET',
         headers: { 

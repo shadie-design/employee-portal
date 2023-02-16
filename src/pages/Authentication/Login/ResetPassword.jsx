@@ -18,6 +18,7 @@ const ResetPassword = () => {
     let history = useNavigate();
     const [employeeNumber, setEmployeeNumber] = useState("");
     const [emailval, setemailval] = useState("");
+    const [oldPasswordValue, setOldPasswordValue] = useState("");
     const [passval, setpassval] = useState("");
     const [confirmedPassval, setConfirmPassval] = useState("");
 
@@ -26,8 +27,8 @@ const ResetPassword = () => {
     const { addToast } = useToasts();
 
     useEffect(() => {
-        setemailval(localStorage.getItem('Email'));
-        setEmployeeNumber(localStorage.getItem('Username'));
+        setemailval(GetCookie('Email'));
+        setEmployeeNumber(GetCookie('Username'));
     }, []);
 
     const [passwordType, setPasswordType] = useState("password");
@@ -49,13 +50,11 @@ const ResetPassword = () => {
         event.preventDefault();
         setIsisLoginInProgress(true);
         // fetch method
-        const setPassowrdUrl = Api.AppBaseUrl + 'ResetPassword';
-        const Id = localStorage.getItem("Id");
-        const CurrentPassword = passval;
-        const NewPassword = confirmedPassval;
-        const email = emailval;
-        const password = passval;
-        const user = { password,email};
+        const setPassowrdUrl = Api.AppBaseUrl + 'ChangePassword';
+        const Id = GetCookie("Id");
+        const CurrentPassword = oldPasswordValue;
+        const NewPassword = passval;
+        const user = { Id, CurrentPassword, NewPassword };
     
         if(confirmedPassval !== passval){
             addToast("Password mismatch", { appearance: 'warning' });
@@ -131,6 +130,10 @@ const ResetPassword = () => {
                     </div>
 
                     <form className='formStyle' onSubmit={handlesubmit}>
+                    <label htmlFor="pwd1">Old Password</label>
+                    <input placeholder="Enter old password" type={passwordType} required={true} autoComplete="false"
+                                value={oldPasswordValue} onChange={(e) => { setOldPasswordValue(e.target.value) }}
+                                id="pwd1" />
                         <label htmlFor="pwd1">New Password</label>
                             <input placeholder="Enter new password" type={passwordType} required={true} autoComplete="false"
                                 value={passval} onChange={(e) => { setpassval(e.target.value) }}
