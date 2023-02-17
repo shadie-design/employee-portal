@@ -303,10 +303,6 @@ const Leaves = () => {
 <Paper className={classes.pageContent}>
 
 <div >
-            <div className="flex justify-between items-center items-center mb-6">
-                <h3 className="m-0">My Leave Status</h3>
-               
-            </div>
 
             <Grid container spacing={3} className="mb-6">
             <Grid item xs={12} md={6}>

@@ -280,8 +280,6 @@ console.log(requiredFields);
                                                     LeaveTypeData.map(
                                                         (item, i) => (<MenuItem key={i} value={item} onClick={()=>{
                                                             setLeaveTypeName(item)
-                                                            recordForEdit.leaveTypeName === item;
-                                                          //  console.log(leaveTypeId)
                                                         }} >{item}</MenuItem>)
                                                     )
                                                 }
