@@ -237,7 +237,7 @@ export default function LeaveForm(props) {
 
     return (
 
-        <Dialog open={openPopup} elevation={3} className={classes.root}>
+        <Dialog open={openPopup} elevation={0} className={classes.root}>
             <DialogTitle>
                 <div className="flex justify-between items-center px-0 ">
 

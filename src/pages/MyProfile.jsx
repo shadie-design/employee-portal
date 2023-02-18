@@ -901,7 +901,7 @@ const MyProfile = () => {
                               <Grid item lg={6} md={6} sm={12} xs={12}>
                                 <button
                                   className="p-2 hover:drop-shadow-xl hover:bg-light-gray"
-                                  style={{ backgroundColor: "green", color: "white", borderRadius: '10px' }}
+                                  style={{ backgroundColor: "#3F51B5", color: "white", borderRadius: '10px' }}
                                   onClick={() => setOpen(!open)}
                                 >
                                   {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
