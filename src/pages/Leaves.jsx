@@ -45,17 +45,17 @@ const useStyles = makeStyles(theme => ({
   pageContent: {
       margin: theme.spacing(3),
       padding: theme.spacing(0),
-      background: '#FAFAFA',
+      background: 'transparent',
   },
   searchInput: {
       width: '75%'
   },
   newButton: {
       position: 'absolute',
-      right: '10px'
+      left: '10px'
   },
   tableHeadExpand: {
-      background: '#F5F5F5'
+      background: 'transparent'
   },
 
 }))
@@ -68,36 +68,13 @@ const headCells = [
   { id: 'duration', label: 'Leave Duration' },
   { id: 'leaveStart', label: 'Leave Start' },
   { id: 'leaveEnd', label: 'Leave End' },
-  { id: 'reliever', label: 'Reliever' },
   { id: 'leaveBalance', label: 'Leave Balance' },
   { id: 'leaveStatus', label: 'Leave Status' },
   { id: 'actions', label: 'Actions', disableSorting: true }
 ]
 
 
-const ExpandableTableRow = ({ children, expandComponent, ...otherProps }) => {
-  const [isExpanded, setIsExpanded] = React.useState(false);
 
-
-  return (
-      <>
-          <TableRow {...otherProps}>
-              <TableCell padding="checkbox">
-                  <IconButton onClick={() => setIsExpanded(!isExpanded)}>
-                      {isExpanded ? <Remove /> : <Add />}
-                  </IconButton>
-              </TableCell>
-              {children}
-          </TableRow>
-          {isExpanded && (
-              <TableRow>
-                  <TableCell padding="checkbox" />
-                  {expandComponent}
-              </TableRow>
-          )}
-      </>
-  );
-};
 
 
 const Leaves = () => {
@@ -165,6 +142,7 @@ const Leaves = () => {
     const savedRowsNumber = 5
   const [rowsPerPage, setRowsPerPage] = React.useState(savedRowsNumber)
   const [page, setPage] = React.useState(0)
+  const today = new Date()
 
   const handleChangePage = (event, newPage) => {
       setPage(newPage)
@@ -247,11 +225,35 @@ const Leaves = () => {
     })
       .then(res => res.json())
       .then((data) => {
-   //  console.log(data);
+    console.log(data);
        setEmployeeleaveRequests(data);
        setGridData(data);
       });
   }
+
+  const ExpandableTableRow = ({ children, expandComponent, ...otherProps }) => {
+    const [isExpanded, setIsExpanded] = React.useState(false);
+  
+  
+    return (
+        <>
+            <TableRow {...otherProps}>
+                <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} padding="checkbox">
+                    <IconButton onClick={() => setIsExpanded(!isExpanded)}>
+                        {isExpanded ? <Remove style={{color: currentMode === 'Dark' ? 'white' : 'black',}} /> : <Add style={{color: currentMode === 'Dark' ? 'white' : 'black',}} />}
+                    </IconButton>
+                </TableCell>
+                {children}
+            </TableRow>
+            {isExpanded && (
+                <TableRow>
+                    <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} padding="checkbox" />
+                    {expandComponent}
+                </TableRow>
+            )}
+        </>
+    );
+  };
   
 
   return (
@@ -310,17 +312,17 @@ const Leaves = () => {
                    
             <div >
       <div style={{ textAlign: 'center' }}>
-        <p className="text-18" style={{ fontWeight: 600 }}>Period : 2020 / 2021 FY</p>
+        <p className="text-18" style={{color: currentMode === 'Dark' ? 'white' : 'black', fontWeight: 600 }}>Period :{today.getFullYear() - 1} / {today.getFullYear()} FY</p>
       </div>
 
-      <TableContainer style={{ paddingLeft: 20, paddingRight: 20, width: '100%', height:300 }} >
+      <TableContainer style={{ paddingLeft: 20, paddingRight: 20, width: '100%', height:330 }} >
         <Table  aria-label="collapsible table" style={{ paddingLeft: 20, paddingRight: 20, paddingBottom: 0, paddingTop: 20,  border: '1px solid rgba(224, 224, 224, 1)' }}  >
           <TableHead  >
             <TableRow >
               <TableCell></TableCell>
-              <TableCell className="text-14" style={{ fontWeight: 600, paddingLeft: 20, border: '1px solid rgba(224, 224, 224, 1)' }} >Carry Forward</TableCell>
-              <TableCell className="text-14" style={{ fontWeight: 600, paddingLeft: 20, border: '1px solid rgba(224, 224, 224, 1)' }} >Annual Entitlement</TableCell>
-              <TableCell className="text-14" style={{ fontWeight: 600, paddingLeft: 20, border: '1px solid rgba(224, 224, 224, 1)' }}> Leave Balance</TableCell>
+              <TableCell className="text-14" style={{color: currentMode === 'Dark' ? 'white' : 'black', fontWeight: 100, paddingLeft: 20, border: '1px solid rgba(224, 224, 224, 1)' }} >Carry Forward</TableCell>
+              <TableCell className="text-14" style={{color: currentMode === 'Dark' ? 'white' : 'black', fontWeight: 100, paddingLeft: 20, border: '1px solid rgba(224, 224, 224, 1)' }} >Annual Entitlement</TableCell>
+              <TableCell className="text-14" style={{color: currentMode === 'Dark' ? 'white' : 'black', fontWeight: 100, paddingLeft: 20, border: '1px solid rgba(224, 224, 224, 1)' }}> Leave Balance</TableCell>
 
             </TableRow>
           </TableHead>
@@ -329,9 +331,9 @@ const Leaves = () => {
               LeaveTypeData.map(
                 (item, i) => (
                   <TableRow key={i} >
-                    <TableCell className="text-14" style={{ fontWeight: 600, paddingLeft: 20, border: '1px solid rgba(224, 224, 224, 1)' }}>{item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase()}</TableCell>
-                    <TableCell align='center' > {item.carryForwardValue} days</TableCell>
-                    <TableCell align='center' style={{ border: '1px solid rgba(224, 224, 224, 1)' }} >{item.entitlementDuration} days</TableCell>
+                    <TableCell className="text-14" style={{color: currentMode === 'Dark' ? 'white' : 'black', fontWeight: 100, paddingLeft: 20, border: '1px solid rgba(224, 224, 224, 1)' }}>{item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase()}</TableCell>
+                    <TableCell align='center' style={{color: currentMode === 'Dark' ? 'white' : 'black'}} > {item.carryForwardValue} days</TableCell>
+                    <TableCell align='center' style={{color: currentMode === 'Dark' ? 'white' : 'black', border: '1px solid rgba(224, 224, 224, 1)' }} >{item.entitlementDuration} days</TableCell>
                     <TableCell align='center' ></TableCell>
                   </TableRow>
 
@@ -349,12 +351,17 @@ const Leaves = () => {
             </Grid>
             <Grid item xs={12} md={6} className='flex justify-center items-center'>
 
-                  <div className="flex justify-center items-center">
-                  
-                  <ButtonGroup variant="contained">
-                  <Button className="bg-primary text-white" size="large" >Current Status</Button>
-                   <Button  className="bg-secondary text-white" size="large">On Leave | End Date : 12/11/2021</Button>
-                  </ButtonGroup>
+                  <div className="flex justify-center items-center row">
+                  <div className="p-4 hover:drop-shadow-xl hover:bg-light-gray"
+                                    style={{ background: currentColor, color: "white" }}>
+                                       Current status
+                                    </div>
+                                    <div className="p-4 hover:drop-shadow-xl hover:bg-light-gray"
+                                    style={{ background: 'white', color: "black" }}>
+                                      On Leave | End Date : 12/11/2021
+                                    </div>
+
+                 
 
                   </div>
              
@@ -369,6 +376,7 @@ const Leaves = () => {
         text=" Raise New Leave Request"
         variant="contained"
         startIcon={<AddIcon />}
+        style={{background:currentMode}}
         className={classes.newButton}
         onClick={() => { setOpenPopup(true); setRecordForEdit(null); }}
     />
@@ -387,48 +395,48 @@ const Leaves = () => {
                     expandComponent={
 
 
-                        <TableCell style={{ paddingBottom: 0, paddingTop: 0, paddingLeft: 130 }} colSpan={6}>
+                        <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black', paddingBottom: 0, paddingTop: 0, paddingLeft: 130 }} colSpan={6}>
 
                             <Box >
 
-                                <Table size="small" aria-label="note" className={classes.tableHeadExpand} >
-                                    <TableHead >
+                                <Table size="small" aria-label="note" style={{background:"transparent"}} className={classes.tableHeadExpand} >
+                                    <TableHead style={{background:"transparent"}}>
                                         <TableRow>
-                                            <TableCell >Approver</TableCell>
-                                            <TableCell>Action</TableCell>
-                                            <TableCell >Date</TableCell>
+                                            <TableCell  >Approver</TableCell>
+                                            <TableCell >Action</TableCell>
+                                            <TableCell  >Date</TableCell>
                                             <TableCell >Remarks</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
 
                                         <TableRow key={2}>
-                                            <TableCell component="th" scope="row">
+                                            <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} component="th" scope="row">
                                                 Elius
                                             </TableCell>
-                                            <TableCell >Pending</TableCell>
-                                            <TableCell>{item.startDate}</TableCell>
-                                            <TableCell align="right">
+                                            <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} >Pending</TableCell>
+                                            <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}}>{item.startDate}</TableCell>
+                                            <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} align="right">
                                                 {item.reliever}
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={3}>
-                                            <TableCell component="th" scope="row">
+                                            <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} component="th" scope="row">
                                                 Harry
                                             </TableCell>
-                                            <TableCell >Approved</TableCell>
-                                            <TableCell>{item.startDate}</TableCell>
-                                            <TableCell align="right">
+                                            <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} >Approved</TableCell>
+                                            <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}}>{item.startDate}</TableCell>
+                                            <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} align="right">
                                                 {item.reliever}
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={4}>
-                                            <TableCell component="th" scope="row">
+                                            <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} component="th" scope="row">
                                                 Jane
                                             </TableCell>
-                                            <TableCell >Pending</TableCell>
-                                            <TableCell>{item.startDate}</TableCell>
-                                            <TableCell align="right">
+                                            <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} >Pending</TableCell>
+                                            <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}}>{item.startDate}</TableCell>
+                                            <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} align="right">
                                                 {item.reliever}
                                             </TableCell>
                                         </TableRow>
@@ -443,34 +451,36 @@ const Leaves = () => {
                     }
                 >
 
-                    <TableCell className="text-14">{item.number}</TableCell>
-                    <TableCell className="text-14">{item.leaveTypeName.charAt(0).toUpperCase() + item.leaveTypeName.slice(1).toLowerCase()}</TableCell>
-                    <TableCell className="text-14">{item.leaveDuration}</TableCell>
-                    <TableCell className="text-14">{format(new Date(item.startDate), 'MM/dd/yyyy')}</TableCell>
-                    <TableCell className="text-14">{format(new Date(item.endDate), 'MM/dd/yyyy')}</TableCell>
-                    <TableCell className="text-14">{item.reliever}</TableCell>
-                    <TableCell className="text-14">{item.leaveBalance}</TableCell>
-                    <TableCell className="text-14">
+                    <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} className="text-14">{item.leaveReferenceNumber}</TableCell>
+                    <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} className="text-14">{item.leaveTypeName.charAt(0).toUpperCase() + item.leaveTypeName.slice(1).toLowerCase()}</TableCell>
+                    <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} className="text-14">{item.leaveDuration}</TableCell>
+                    <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} className="text-14">{format(new Date(item.startDate), 'MM/dd/yyyy')}</TableCell>
+                    <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} className="text-14">{format(new Date(item.endDate), 'MM/dd/yyyy')}</TableCell>
+                    <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} className="text-14">{item.leaveBalance}</TableCell>
+                    <TableCell style={{color: currentMode === 'Dark' ? 'white' : 'black',}} className="text-14">
                         {item.leaveStatus ? (
-                            item.leaveStatus == "Approved" ? (
-                                <small className="border-radius-4 bg-green text-white px-4 py-2px">
+                            item.leaveStatus === "Approved" ? (
+                                <small className="p-2 hover:drop-shadow-xl hover:bg-light-gray"
+                                style={{ backgroundColor: "green", color: "white", borderRadius: '10px' }}>
                                     {item.leaveStatus}
                                 </small>
                             ) : (
-                                item.leaveStatus == "Pending Approval" ? (
-                                    <small className="border-radius-4 bg-primary text-white px-4 py-2px">
+                                item.leaveStatus === "Pending Approval" ? (
+                                    <small className="p-2 hover:drop-shadow-xl hover:bg-light-gray"
+                                    style={{ backgroundColor: "#1A97F5", color: "white", borderRadius: '10px' }}>
                                         {item.leaveStatus}
                                     </small>
-                                ) : (<small className="border-radius-4 bg-error text-white px-4 py-2px">
+                                ) : (<small className="p-2 hover:drop-shadow-xl hover:bg-light-gray"
+                                style={{ backgroundColor: "#DC3545", color: "white", borderRadius: '10px' }}>
                                     {item.leaveStatus}
                                 </small>)
                             )
                         )
 
                             : (
-                                <small className="border-radius-4 bg-primary text-white px-4 py-2px">
+                                <div className="border-radius-4 bg-primary text-white px-4 py-2px">
                                     Pending Approval
-                                </small>
+                                </div>
                             )}
                     </TableCell>
                     <TableCell>
@@ -502,7 +512,8 @@ const Leaves = () => {
     className="px-4"
     rowsPerPageOptions={[2, 5, 10, 25]}
     component="div"
-    count={gridData.length}
+    count={5}
+    style={{color: currentMode === 'Dark' ? 'white' : 'black',}}
     rowsPerPage={rowsPerPage}
     page={page}
     backIconButtonProps={{

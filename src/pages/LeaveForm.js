@@ -147,7 +147,7 @@ export default function LeaveForm(props) {
                 }).then(res => res.json())
 
                     .then((responseCode) => {
-                        console.log(responseCode)
+                    //    console.log(responseCode)
                         if (responseCode.success == true) {
                             addToast(responseCode.message, { appearance: 'success' });
                             setOpenPopup(false)
@@ -193,7 +193,7 @@ export default function LeaveForm(props) {
                 }).then(res => res.json())
 
                     .then((responseCode) => {
-                        console.log(responseCode)
+                    //    console.log(responseCode)
                         if (responseCode.success == true) {
                             addToast(responseCode.message, { appearance: 'success' });
                             setOpenPopup(false)
@@ -331,7 +331,7 @@ export default function LeaveForm(props) {
                 {recordForEdit === null ? <Button variant="contained" color="primary" onClick={handleSubmit}>Add</Button> :
                     <Button variant="contained" color="primary" onClick={updateLeaveRequest}>Update</Button>}
 
-                <Button variant="contained" color="secondary" onClick={() => { handleClose() }}>Cancel</Button>
+                <Button variant="contained" style={{background:"yellow", color:"black"}}  onClick={() => { handleClose() }}>Cancel</Button>
 
             </DialogActions>
 
