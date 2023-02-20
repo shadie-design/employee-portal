@@ -18,14 +18,14 @@ export default function Input(props) {
     return (
         <div>
         {currentMode === "dark" ?   <TextField
-        variant="standard"
+        variant="outlined"
         label={label}
         name={name}
         value={value}
         onChange={onChange}
         inputStyle={{ backgroundColor: 'red' }}
     /> :   <TextField
-    variant="standard"
+    variant="outlined"
     label={label}
     name={name}
     value={value}

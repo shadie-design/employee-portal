@@ -64,6 +64,10 @@ const MyProfile = () => {
 
   //--form fields start
   //security info
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [phoneVerified, setPhoneVerified] = useState(false);
+  const [userRole, setUserRole] = useState(false);
+  const [dateLastLoggedIn, setDateLastLoggedIn] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -101,6 +105,7 @@ const MyProfile = () => {
     const currentThemeMode = localStorage.getItem('themeMode');
     const currentLoginStatus = localStorage.getItem('isLoggedIn');
     GetEmployeeData();
+    GetEmployeeUserInfo();
     if (currentThemeColor && currentThemeMode) {
       setCurrentColor(currentColor);
       setCurrentMode(currentThemeMode);
@@ -164,6 +169,36 @@ const MyProfile = () => {
 
       });
   }
+
+  const GetEmployeeUserInfo = () => {
+    const employeeDataUrl = Api.AppBaseUrl + 'EmployeePortal/Employee/GetEmployeeUserInfoByName/' + userName;
+    fetch(employeeDataUrl, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${GetCookie("Token")}`,
+      },
+    })
+      .then(res => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.success === true) {
+          SetCookie('IsLoggedIn', true);
+          //employment details
+
+          setEmailVerified(data.data.emailConfirmed);
+          setPhoneVerified(data.data.phoneNumberConfirmed);
+          setUserRole(data.data.selectedRolesStr)
+          setDateLastLoggedIn(data.data.datelastModified);
+
+        } else {
+          addToast(data.errorMessage, { appearance: 'error' });
+        }
+
+      });
+  }
+
   const [editProfileImage, setEditProfileImage] = useState();
   //for tabs
   const [toggleState, setToggleState] = useState(1);
@@ -1011,7 +1046,7 @@ const MyProfile = () => {
                                   control={<Checkbox
                                     name="emailverified"
                                     color="default"
-                                    checked={true}
+                                    checked={emailVerified === true ? true : false}
                                     disabled={true}
                                     onChange={handleChange}
                                     style={{ color: (currentMode === 'Dark') && 'white' }}
@@ -1029,7 +1064,7 @@ const MyProfile = () => {
                                   control={<Checkbox
                                     name="phoneverified"
                                     color="default"
-                                    checked={true}
+                                    checked={phoneVerified === true? true :false}
                                     disabled={true}
                                     onChange={handleChange}
                                     style={{ color: (currentMode === 'Dark') && 'white' }}
@@ -1056,7 +1091,7 @@ const MyProfile = () => {
                                   name="userrole"
                                   disabled={true}
                                   type="text"
-                                  value={'Employee'}
+                                  value={userRole}
                                 />
                               </Grid>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -1078,7 +1113,7 @@ const MyProfile = () => {
                                   name="loginDate"
                                   disabled={true}
                                   type="text"
-                                  value={'16 Feb 2023  12:45'}
+                                  value={dateLastLoggedIn}
                                 />
                               </Grid>
                               <Grid item lg={6} md={6} sm={12} xs={12}>
