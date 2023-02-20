@@ -241,7 +241,7 @@ export default function LeaveForm(props) {
             <DialogTitle>
                 <div className="flex justify-between items-center px-0 ">
 
-                    Raise New Leave Request
+                {recordForEdit === null ?  "Raise New Leave Request" : "Edit leave request" }
                     <IconButton
                         aria-label="close"
                         onClick={() => { handleClose() }}
