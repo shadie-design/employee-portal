@@ -34,8 +34,9 @@ const Navbar = () => {
   const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
   let history = useNavigate ();
   const loggedIn = GetCookie('IsLoggedIn');
+  const userEmail = GetCookie('Email')
   useEffect(() => {
-    if(loggedIn === "false"){
+    if(loggedIn === "false" || userEmail === ""){
       history("/");
     }
     const handleResize = () => setScreenSize(window.innerWidth);

@@ -6,27 +6,49 @@ import { userProfileData } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
 import avatar from '../data/avatar.jpg';
 import { FiLogOut } from 'react-icons/fi';
-
+import { useToasts } from "react-toast-notifications";
 import SetCookie from '../../src/Hooks/SetCookie';
 import GetCookie from '../../src/Hooks/GetCookie';
 import RemoveCookie from '../../src/Hooks/RemoveCookie';
-
+import Api from '../contexts/Api';
 const UserProfile = () => {
   const { currentColor,setIsClicked } = useStateContext();
   let history = useNavigate();
+  const { addToast } = useToasts()
   const userName = GetCookie('Username');
   const userEmail = GetCookie('Email');
   const phoneNumber = GetCookie('Phone');
 
-  const logout = async () => {
-    await history("/");
-    RemoveCookie("Username");
-    RemoveCookie("Email");
-    RemoveCookie("Phone");
-    RemoveCookie("Token");
-    RemoveCookie("TenantId");
-    SetCookie('IsLoggedIn', false);
-  }
+  const logout = () => {
+    const employeeName = GetCookie("Username");
+    const userToken = GetCookie("Token");
+    const logoutUrl = Api.AppBaseUrl + 'Logout/' + employeeName;
+    fetch(logoutUrl, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`,
+        },
+    })
+        .then(res => res.json())
+        .then((data) => {
+          if (data.success === true) {
+
+            RemoveCookie("Username");
+            RemoveCookie("Email");
+            RemoveCookie("Phone");
+            RemoveCookie("Token");
+            RemoveCookie("TenantId");
+            SetCookie('IsLoggedIn', false);
+            history("/");
+            addToast(data.message, { appearance: 'success' }); 
+        }else{
+            addToast(data.message, { appearance: 'error' }); 
+        }
+        })
+}
+
 
   return (
     <div className="nav-item absolute right-1 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">

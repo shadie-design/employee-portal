@@ -331,7 +331,7 @@ export default function LeaveForm(props) {
                 {recordForEdit === null ? <Button variant="contained" color="primary" onClick={handleSubmit}>Add</Button> :
                     <Button variant="contained" color="primary" onClick={updateLeaveRequest}>Update</Button>}
 
-                <Button variant="contained" style={{background:"yellow", color:"black"}}  onClick={() => { handleClose() }}>Cancel</Button>
+                <Button variant="contained" style={{background:"orange", color:"black"}}  onClick={() => { handleClose() }}>Cancel</Button>
 
             </DialogActions>
 
