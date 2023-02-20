@@ -357,18 +357,18 @@ const Leaves = () => {
                     </Grid>
                     <Grid item xs={12} md={6} className='flex justify-center items-center'>
 
-                      <div className="flex  justify-center items-center row">
+                      <div className="flex w-full justify-center items-center row">
 
                         {/* For summary */}
-                        <div className="w-full bg-white dark:bg-secondary-dark-bg p-8 rounded-lg w-96">
-                          <div className="flex items-center">
+                        <div className="bg-white dark:bg-secondary-dark-bg p-2 rounded-lg w-100">
+                          <div className="flex w-full items-center">
                           <div className="p-4 hover:drop-shadow-xl hover:bg-light-gray"
                           style={{ background: currentColor, color: "white" }}>
                           Current status
                         </div>
-                        <div className="p-4 hover:drop-shadow-xl hover:bg-light-gray"
+                        <div className="p-4 w-96 hover:drop-shadow-xl hover:bg-light-gray"
                           style={{ background: '#FFD580', color: "black" }}>
-                          On Leave
+                          On Leave (Paternity leave)  | 5 days remaining
                         </div> 
                           </div>
 
