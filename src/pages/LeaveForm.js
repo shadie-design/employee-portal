@@ -155,6 +155,7 @@ export default function LeaveForm(props) {
                         } else {
                             addToast(responseCode.errorMessage, { appearance: 'error' });
                             setOpenPopup(false)
+                            resetForm()
                         }
                         LoadLeaveRequests()
                     })
@@ -201,6 +202,7 @@ export default function LeaveForm(props) {
                         } else {
                             addToast(responseCode.errorMessage, { appearance: 'error' });
                             setOpenPopup(false)
+                            resetForm()
                         }
                         LoadLeaveRequests()
                     })

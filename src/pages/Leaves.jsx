@@ -48,21 +48,6 @@ const useStyles = makeStyles(theme => ({
     },
   },
   hover: {},
-  pageContent: {
-    margin: theme.spacing(3),
-    padding: theme.spacing(0),
-    background: 'transparent',
-  },
-  searchInput: {
-    width: '75%'
-  },
-  newButton: {
-    position: 'absolute',
-    left: '10px'
-  },
-  tableHeadExpand: {
-    background: 'transparent'
-  },
 
 }))
 
@@ -308,7 +293,7 @@ const Leaves = () => {
 
 
 
-              <Paper className={classes.pageContent}>
+              <Paper style={{background:"transparent", margin:20}}>
 
                 <div style={{ marginBottom: 30 }}>
 
@@ -463,7 +448,7 @@ const Leaves = () => {
 
                               <Box >
 
-                                <Table size="small" aria-label="note" style={{ background: "transparent" }} className={classes.tableHeadExpand} >
+                                <Table size="small" aria-label="note" style={{ background: "transparent" }} >
                                   <TableHead style={{ background: "transparent" }}>
                                     <TableRow>
                                       <TableCell  >Approver</TableCell>
@@ -587,8 +572,8 @@ const Leaves = () => {
                   nextIconButtonProps={{
                     'aria-label': 'Next Page',
                   }}
-                  onChangePage={(e) => handleChangePage(e)}
-                  onChangeRowsPerPage={handleChangeRowsPerPage}
+                  onPageChange={(e) => handleChangePage(e)}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               </Paper>
 
@@ -642,7 +627,7 @@ const Leaves = () => {
             </div>
 
           </div>
-  <Footer/> 
+  {/* <Footer/>  */}
         </div>
       </div>
     </div>

@@ -23,14 +23,12 @@ export default function Input(props) {
         name={name}
         value={value}
         onChange={onChange}
-        inputStyle={{ backgroundColor: 'red' }}
     /> :   <TextField
     variant="outlined"
     label={label}
     name={name}
     value={value}
     onChange={onChange}
-    inputStyle={{ backgroundColor: 'red' }}
     {...other}
     {...(error && {error:true,helperText:error})}
 />}
